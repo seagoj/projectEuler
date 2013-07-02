@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require "./projecteuler.rb"
 include ProjectEuler
 
-print "#{eratosthenesSieve(2000000).inject(:+)}\n"
+puts "#{eratothenesSieve(2000000).inject(:+)}\n"

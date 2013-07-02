@@ -6,16 +6,17 @@ module ProjectEuler
     
         field.each {|i|
             unless i>Math.sqrt(limit)
-                field[0..field.index(i)-1].each {|j|
+                field[0..field.index(i)].each {|j|
                     if i%j===0
                         coeff=1
                         while coeff*i <= limit do
-                            field.delete(c*i)
-                            coeff = coeff+1
+                            field.delete(coeff*i) unless (coeff*i)===j
+                            coeff += 1
                         end
                     end
                 }
             end
+            puts "#{field}\n"
         }
     end
 
