@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+require './ProjectEuler.rb'
+include ProjectEuler
+
 def sumMultiples(number1, number2, limit)
     multiples = []
 
@@ -11,4 +14,4 @@ def sumMultiples(number1, number2, limit)
     multiples.inject(:+)
 end
 
-print sumMultiples(3, 5, 1000)
+assertTrue(sumMultiples(3, 5, 1000), 233168)

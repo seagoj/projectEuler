@@ -142,4 +142,15 @@ module ProjectEuler
         
         primes.last
     end
+
+    def assertTrue(result, answer)
+        if result===answer
+            print "SUCCESS: "
+        else
+            print "FAILURE: "
+        end
+
+        puts result
+        result===answer
+    end
 end
