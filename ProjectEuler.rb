@@ -20,6 +20,18 @@ module ProjectEuler
         }
     end
 
+    def fibonacci(limit)
+        sequence = [1, 2]
+    
+        length = sequence.length
+
+        while sequence[length-1]+sequence[length-2] < limit do
+            sequence << sequence[length-1]+sequence[length-2]
+            length = sequence.length
+        end
+        sequence
+    end
+
     def prime?
     prime = true
 
