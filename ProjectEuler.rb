@@ -33,9 +33,9 @@ module ProjectEuler
     end
 
     def prime?
-    prime = true
+        prime = true
 
-    if !self.is_a? Array
+        if !self.is_a? Array
             for i in 2..Math.sqrt(self)
                 if self%i===0
                     prime = false
@@ -45,13 +45,11 @@ module ProjectEuler
             if self.empty?
                 prime = nil
             else
-                self.flatten.each do |n|
+                self.flatten.each { |n|
                     for i in 2..n-1
-                        if n%i===0
-                            prime = false
-                        end
+                        prime = false if n%i===0
                     end
-                end
+                }
             end
         end
         prime
@@ -59,24 +57,31 @@ module ProjectEuler
 
     def factor(number, options={})
         options[:uniq] = true if options[:uniq].nil?
+        options[:verbose] = false if options[:verbose].nil?
+
+        puts "#{options}\n" if options[:verbose]
+
         number = Array(number) unless number.is_a? Array
 
         factors = []
         number.each do |n|
             for i in 2..n-1
-                if n%i===0 && !factors.prime?
+                if n%i===0 && ! factors.prime?
                     if i.prime?
                         factors << i
+                        puts "#{i}\n" if options[:verbose]
                     else
                         factors << factor(i, options)
                     end
 
                     if (n/i).prime?
                         factors << (n/i)
+                        puts "#{i}\n" if options[:verbose]
                     else
                         factors << factor(n/i, options)
                     end
                 end
+                break if factors.prime?
             end
         end
        
