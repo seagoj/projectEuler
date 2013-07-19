@@ -8,4 +8,4 @@ for i in 2..20
     factors = union(factors, factor(i))
 end
 
-assertTrue(factors.inject(:*), 232792560)
+assertEquals(factors.inject(:*), 232792560)

@@ -3,4 +3,6 @@
 require "./ProjectEuler.rb"
 include ProjectEuler
 
-puts "#{eratosthenesSieve(2000000).inject(:+)}\n"
+puts "#{eratosthenesSieve(200000, verbose: true)}\n"
+
+#puts "#{loadField(200, file: 'primes.json')}\n"

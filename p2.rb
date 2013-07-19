@@ -13,10 +13,7 @@ def sumEven(array)
     sum
 end
 
-if(fibonacci(4000000)[0..9] == [1,2,3,5,8,13,21,34,55,89])
-    puts "Test Successful\n"
-    puts sumEven(fibonacci(4000000))
-else
-    puts "Failed"
-end
+result = fibonacci(4000000)
+testAnswer = [1,2,3,5,8,13,21,34,55,89]
 
+puts "\n#{sumEven(result)}" if assertEquals(result[0..9], testAnswer)

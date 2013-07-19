@@ -14,4 +14,4 @@ def sumMultiples(number1, number2, limit)
     multiples.inject(:+)
 end
 
-assertTrue(sumMultiples(3, 5, 1000), 233168)
+assertEquals(sumMultiples(3, 5, 1000), 233168)
