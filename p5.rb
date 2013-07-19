@@ -1,20 +1,11 @@
 #!/usr/bin/env ruby
 
-found = false
-start = 1
+require './ProjectEuler.rb'
+include ProjectEuler
 
-while !found do
-    print "Checking #{start}"
-    found = true
-    (1..20).each {|n|
-        unless start%n===0
-            found = false
-        end
-    }
-    if found
-        print ": FOUND!\n"
-    else
-        print ": not found\n"
-        start = start+1
-    end
+factors = []
+for i in 2..20
+    factors = union(factors, factor(i))
 end
+
+assertEquals(factors.inject(:*), 232792560)
