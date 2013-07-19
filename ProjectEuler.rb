@@ -16,14 +16,13 @@ module ProjectEuler
                     end
                 }
             end
-            puts "#{field}\n"
         }
     end
 
     def prime?
-    prime = true
+        prime = true
 
-    if !self.is_a? Array
+        if !self.is_a? Array
             for i in 2..Math.sqrt(self)
                 if self%i===0
                     prime = false
@@ -69,6 +68,9 @@ module ProjectEuler
         end
        
         factors = [number] if factors.empty?
+        factors = factors.uniq if options[:uniq]
+        puts options[:uniq]
+        puts factors
         factors.flatten.sort
     end
 
