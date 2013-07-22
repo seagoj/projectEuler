@@ -7,7 +7,8 @@ module ProjectEuler
         options[:file] = 'primes.json' if options[:file].nil?
 
         field = loadField(limit, options)
-        lastPrime = JSON.parse(File.read(options[:file])).last
+        lastPrime = JSON.parse(File.read(options[:file])).last if File.exists?(options[:file])
+        lastPrime = 2 if lastPrime.nil?
 
         field.each {|i|
             prime = true
@@ -16,10 +17,10 @@ module ProjectEuler
                     if i%j===0
                         prime = false
                         coeff=1
-                        puts "Removing multiples of #{i}"
+                        puts "Removing multiples of #{i}" if options[:verbose]
                         while coeff*i <= limit do
                             field.delete(coeff*i) unless (coeff*i)===j
-                            print "#{coeff*i}/#{limit} - #{100*(coeff*i)/limit}%\n"
+                            print "#{coeff*i}/#{limit} - #{100*(coeff*i)/limit}%\n" if options[:verbose]
                             coeff += 1
                         end
                     end
@@ -75,6 +76,8 @@ module ProjectEuler
     def prime?
         prime = true
 
+#        print "#{self}\n"
+
         if !self.is_a? Array
             for i in 2..Math.sqrt(self)
                 if self%i===0
@@ -86,8 +89,10 @@ module ProjectEuler
                 prime = nil
             else
                 self.flatten.each { |n|
-                    for i in 2..n-1
-                        prime = false if n%i===0
+                    unless n.nil?
+                        for i in 2..n-1
+                            prime = false if n%i===0
+                        end
                     end
                 }
             end
@@ -98,6 +103,8 @@ module ProjectEuler
     def factor(number, options={})
         options[:uniq] = true if options[:uniq].nil?
         options[:verbose] = false if options[:verbose].nil?
+
+#        exit if number.nil?
 
         puts "#{options}\n" if options[:verbose]
 
@@ -126,10 +133,9 @@ module ProjectEuler
         end
        
         factors = [number] if factors.empty?
-        factors = factors.uniq if options[:uniq]
-        puts options[:uniq]
-        puts factors
-        factors.flatten.sort
+        factors = factors.compact.flatten.sort
+
+        return (options[:uniq] ? factors.uniq : factors)
     end
 
     def leastCommonMultiple(n)
@@ -184,16 +190,5 @@ module ProjectEuler
         end
         
         primes.last
-    end
-
-    def assertEquals(result, answer)
-        if result===answer
-            print "SUCCESS: "
-        else
-            print "FAILURE: "
-        end
-
-        print result
-        result===answer
     end
 end
