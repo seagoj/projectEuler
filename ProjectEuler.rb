@@ -20,7 +20,7 @@ module ProjectEuler
                         puts "Removing multiples of #{i}" if options[:verbose]
                         while coeff*i <= limit do
                             field.delete(coeff*i) unless (coeff*i)===j
-                            print "#{coeff*i}/#{limit} - #{100*(coeff*i)/limit}%\n" if options[:verbose]
+                            print "#{i}: #{coeff*i}/#{limit} - #{100*(coeff*i)/limit}%\n" if options[:verbose]
                             coeff += 1
                         end
                     end
@@ -50,7 +50,7 @@ module ProjectEuler
             field = ret
 
             if field.prime?
-                field += ((field.last+2)..limit).to_a unless limit<field.last+2
+                field += ((field.last+2)..limit).step(2).to_a unless limit<field.last+2
             else
                 field = (2..limit).to_a
             end
@@ -76,12 +76,11 @@ module ProjectEuler
     def prime?
         prime = true
 
-#        print "#{self}\n"
-
         if !self.is_a? Array
             for i in 2..Math.sqrt(self)
                 if self%i===0
                     prime = false
+#                    puts "#{self} is not prime"
                 end
             end
         else
@@ -91,7 +90,10 @@ module ProjectEuler
                 self.flatten.each { |n|
                     unless n.nil?
                         for i in 2..n-1
-                            prime = false if n%i===0
+                            if n%i===0
+                                prime = false
+#                                puts "#{n} is not prime"
+                            end
                         end
                     end
                 }
@@ -103,8 +105,7 @@ module ProjectEuler
     def factor(number, options={})
         options[:uniq] = true if options[:uniq].nil?
         options[:verbose] = false if options[:verbose].nil?
-
-#        exit if number.nil?
+        options[:prime] = true if options[:prime].nil?
 
         puts "#{options}\n" if options[:verbose]
 
@@ -113,19 +114,19 @@ module ProjectEuler
         factors = []
         number.each do |n|
             for i in 2..n-1
-                if n%i===0 && ! factors.prime?
-                    if i.prime?
+                if n%i===0 && (!options[:prime] || !factors.prime?)
+                    if !options[:prime] || i.prime?
                         factors << i
                         puts "#{i}\n" if options[:verbose]
                     else
-                        factors << factor(i, options)
+                        factors << factor(i, options) if options[:prime]
                     end
 
-                    if (n/i).prime?
+                    if !options[:prime] || (n/i).prime?
                         factors << (n/i)
                         puts "#{i}\n" if options[:verbose]
                     else
-                        factors << factor(n/i, options)
+                        factors << factor(n/i, options) if options[:prime]
                     end
                 end
                 break if factors.prime?
@@ -136,6 +137,23 @@ module ProjectEuler
         factors = factors.compact.flatten.sort
 
         return (options[:uniq] ? factors.uniq : factors)
+    end
+
+    def numFactors(number, options={})
+        primeFactors = factor(number, uniq:false)
+        count = {}
+        count.default = 0
+        factors = 1
+
+        primeFactors.each do |p|
+            count[p] += 1
+        end
+
+        count.each do |k,v|
+            factors *= (v+1)
+        end
+
+        factors
     end
 
     def leastCommonMultiple(n)
@@ -190,5 +208,56 @@ module ProjectEuler
         end
         
         primes.last
+    end
+
+    def atkinsSieve(limit, options={})
+        options[:verbose] = false if options[:verbose].nil?
+
+        result = [2,3,5]
+        lastSpecialCase = result.last
+
+        field = {}
+        field.default = false
+
+        # Toggle prime status if n meets any of the conditions below
+        # 1: n=4x^2+y^2 and n%12=1 or n%12=5
+        # 2: n=3x^2+y^2 and n%12=7
+        # 3: n=3x^2-y^2 and x>y and n%12=11
+        for x in 1..Math.sqrt(limit)
+            for y in 1..Math.sqrt(limit)
+                n = 4*(x**2)+(y**2)
+                mod12 = n%12
+                if (n>lastSpecialCase) && (n<=limit) && (mod12==1 || mod12==5)
+                    field[n] = !field[n]
+                end
+
+                n = 3*(x**2)+(y**2)
+                mod12 = n%12
+                if (n>lastSpecialCase) && (n<=limit) && (mod12==7)
+                    field[n] = !field[n]
+                end
+
+                n = 3*(x**2)-(y**2)
+                mod12 = n%12
+                if (n>lastSpecialCase) && (x>y) && (n<=limit) && (mod12==11)
+                    field[n] = !field[n]
+                end
+            end
+        end
+
+        # Mark multiples of prime^2 as composite
+        (lastSpecialCase..Math.sqrt(limit)).each{ |n|
+            coeff = 1
+            while coeff*(n**2) < limit do
+                field[coeff*(n**2)] = false
+                coeff += 1
+            end
+        }
+        
+        # Move primes to return variable    
+        field.each { |n, status|
+            result << n if status    
+        }
+        result
     end
 end

@@ -37,6 +37,10 @@ describe ProjectEuler, "#factor" do
     it "returns an array of the union of prime factors of number" do
         factor(12, uniq:false).should eq([2,2,3])
     end
+
+    it "returns an array of nonprime factors of number" do
+        factor(28, prime:false).should eq([2,4,7,14])
+    end
 end
 
 describe ProjectEuler, "#fibonacci" do
@@ -64,5 +68,17 @@ end
 describe ProjectEuler, "#nthPrime" do
     it "returns the nth prime number" do
         nthPrime(100).should eq(541)
+    end
+end
+
+describe ProjectEuler, "#atkinsSieve" do
+    it "returns array of primes less than limit(100)" do
+        atkinsSieve(100).prime?.should be(true)
+    end
+end
+
+describe ProjectEuler, "#numFactors" do
+    it "returns number of factors for a given number" do
+        numFactors(360).should eq(24)
     end
 end
