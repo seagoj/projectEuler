@@ -260,4 +260,22 @@ module ProjectEuler
         }
         result
     end
+
+    # returns number of possible paths of length x,y on a grid moving in only one
+    # vertical direction and one horizontal direction
+    def latticePath(x, y)
+        (x+y).choose(y)
+    end
+
+    def factorial(n)
+        product = 1;
+        (2..n).each do |f|
+            product *= f
+        end
+        product
+    end
+
+    def choose(k)
+        factorial(self)/(factorial(self-k)*factorial(k))
+    end
 end

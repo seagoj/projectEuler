@@ -2,4 +2,4 @@
 require './ProjectEuler.rb'
 include ProjectEuler
 
-puts latticePath(20,20)
+puts "#{(2**1000).to_s.split("").collect{|s| s.to_i}.inject(:+)}\n"

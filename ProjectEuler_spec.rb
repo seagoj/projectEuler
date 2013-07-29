@@ -82,3 +82,25 @@ describe ProjectEuler, "#numFactors" do
         numFactors(360).should eq(24)
     end
 end
+
+describe ProjectEuler, "#factorial" do
+    it "returns the factorial of the passed number" do
+        factorial(2).should eq(2)
+        factorial(10).should eq(3628800)
+    end
+end
+
+describe ProjectEuler, "#choose" do
+    it "returns the binomial coefficient of passed combination" do
+        4.choose(2).should eq(6)
+        40.choose(20).should eq(137846528820)
+    end
+end
+
+describe ProjectEuler, "#latticePath" do
+    it "returns the number of possible paths of length (x,y) when travelling in 1 horizontal and 1 vertical direction" do
+        latticePath(2,2).should eq(6)
+        latticePath(20,20).should eq(137846528820)
+    end
+end
+
