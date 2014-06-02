@@ -7,10 +7,9 @@ def sumMultiples(number1, number2, limit)
     multiples = []
 
     for i in 1..(limit-1)
-        if i%number1===0 || i%number2===0
-            multiples << i
-        end
+        multiples << i if (i%number1===0 || i%number2===0)
     end
+
     multiples.inject(:+)
 end
 
